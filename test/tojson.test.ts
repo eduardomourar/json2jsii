@@ -188,9 +188,18 @@ describe('maps', () => {
             Bar: { type: 'string' },
           },
         },
+        CasingPreserved: {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+          },
+          childCasing: 'preserve',
+          additionalProperties: true,
+        },
       },
       properties: {
         ComplexMap: { additionalProperties: { $ref: '#/definitions/MyType' } },
+        CasingPreserved: { $ref: '#/definitions/CasingPreserved' },
       },
     });
 
@@ -199,10 +208,20 @@ describe('maps', () => {
         foya: { foo: 123, bar: 'barbar' },
         hello_world: { foo: 3333 },
       },
+      casingPreserved: {
+        foo: 'foo',
+        hello_world: { foo: 3333 },
+        anotherOne: true,
+      },
     })).toStrictEqual({
       ComplexMap: {
         foya: { Foo: 123, Bar: 'barbar' },
         hello_world: { Foo: 3333 },
+      },
+      CasingPreserved: {
+        foo: 'foo',
+        hello_world: { foo: 3333 },
+        anotherOne: true,
       },
     });
   });

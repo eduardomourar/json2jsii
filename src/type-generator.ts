@@ -220,7 +220,7 @@ export class TypeGenerator {
       }
 
       const et = this.typeForProperty(typeName, def.additionalProperties);
-      const toJson = (x: string) => `((${x}) === undefined) ? undefined : (Object.entries(${x}).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: ${et.toJson('i[1]') } }), {}))`;
+      const toJson = (x: string) => `((${x}) === undefined) ? undefined : (Object.entries(${x}).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: ${et.toJson('v') } }), {}))`;
       return { type: `{ [key: string]: ${et.type} }`, toJson };
     }
 
@@ -363,7 +363,9 @@ export class TypeGenerator {
   }
 
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string): EmittedType {
-    const toJson = new ToJsonFunction(typeName);
+    const allowAdditional = !!structDef.additionalProperties;
+    const preserveCasing = structDef.childCasing === 'preserve';
+    const toJson = new ToJsonFunction(typeName, allowAdditional, preserveCasing);
     const emitted: EmittedType = {
       type: typeName,
       toJson: x => `${toJson.functionName}(${x})`,
@@ -378,7 +380,7 @@ export class TypeGenerator {
         this.emitProperty(code, propName, propSpec, structFqn, structDef, toJson);
       }
 
-      if (structDef.additionalProperties) {
+      if (allowAdditional) {
         if (structDef.additionalProperties === true) {
           code.line('[key: string]: any;');
         } else if (typeof(structDef.additionalProperties) === 'object') {

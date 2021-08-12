@@ -8,7 +8,11 @@ export class ToJsonFunction {
 
   private readonly fields: Record<string, string> = {};
 
-  constructor(private readonly baseType: string) {
+  constructor(
+    private readonly baseType: string,
+    private readonly allowAdditional = false,
+    private readonly preserveCasing = false,
+  ) {
     this.functionName = `toJson_${baseType}`;
   }
 
@@ -33,14 +37,27 @@ export class ToJsonFunction {
     code.openBlock(`export function ${this.functionName}(obj: ${this.baseType} | undefined): Record<string, any> | undefined`);
     code.line('if (obj === undefined) { return undefined; }');
 
-    code.open('const result = {');
+    code.open('const result: Record<string, any> = {');
     for (const [k, v] of Object.entries(this.fields)) {
       code.line(`'${k}': ${v},`);
     }
     code.close('};');
 
+    if (this.allowAdditional) {
+      code.open('for (const [k, v] of Object.entries(obj)) {');
+      if (this.preserveCasing) {
+        code.line('const key = k;');
+      } else {
+        code.line('const key = k.replace(/^./, k[0].toUpperCase());');
+      }
+      code.open('if (!result[key]) {');
+      code.line('result[key] = v;');
+      code.close('};');
+      code.close('};');
+    }
+
     code.line('// filter undefined values');
-    code.line('return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});');
+    code.line('return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});');
 
     code.closeBlock();
     code.line('/* eslint-enable max-len, quote-props */');

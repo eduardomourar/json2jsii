@@ -28,12 +28,12 @@ export interface Person {
 /* eslint-disable max-len, quote-props */
 export function toJson_Person(obj: Person | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'name': toJson_Name(obj.name),
     'favorite_color': obj.favoriteColor,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -65,12 +65,12 @@ export interface Name {
 /* eslint-disable max-len, quote-props */
 export function toJson_Name(obj: Name | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'FirstName': obj.firstName,
     'last_name': obj.lastName,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 

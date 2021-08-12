@@ -18,11 +18,11 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'MyAny': obj.myAny,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -46,11 +46,11 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Array_Of_complex': obj.arrayOfComplex?.map(y => toJson_MyType(y)),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -76,12 +76,12 @@ export interface MyType {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyType(obj: MyType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Foo': obj.foo,
     'Bar': obj.bar,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -105,11 +105,11 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'ArrayProp': obj.arrayProp?.map(y => y),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -133,11 +133,11 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'ComplexType': toJson_MyType(obj.complexType),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -168,13 +168,13 @@ export interface MyType {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyType(obj: MyType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Foo': obj.foo,
     'Bar': obj.bar,
     'Nested': toJson_YourType(obj.nested),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -195,11 +195,11 @@ export interface YourType {
 /* eslint-disable max-len, quote-props */
 export function toJson_YourType(obj: YourType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'John': obj.john?.map(y => y),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -223,11 +223,11 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'DateTime': obj.dateTime?.toISOString(),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -256,12 +256,12 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'MyEnum': obj.myEnum,
     'YourEnum': obj.yourEnum,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -299,6 +299,11 @@ export interface MyStruct {
    */
   readonly complexMap?: { [key: string]: MyType };
 
+  /**
+   * @schema MyStruct#CasingPreserved
+   */
+  readonly casingPreserved?: CasingPreserved;
+
 }
 
 /**
@@ -307,11 +312,12 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
-    'ComplexMap': ((obj.complexMap) === undefined) ? undefined : (Object.entries(obj.complexMap).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: toJson_MyType(i[1]) }), {})),
+  const result: Record<string, any> = {
+    'ComplexMap': ((obj.complexMap) === undefined) ? undefined : (Object.entries(obj.complexMap).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: toJson_MyType(v) }), {})),
+    'CasingPreserved': toJson_CasingPreserved(obj.casingPreserved),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -337,12 +343,44 @@ export interface MyType {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyType(obj: MyType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Foo': obj.foo,
     'Bar': obj.bar,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
+}
+/* eslint-enable max-len, quote-props */
+
+/**
+ * @schema CasingPreserved
+ */
+export interface CasingPreserved {
+  /**
+   * @schema CasingPreserved#foo
+   */
+  readonly foo?: string;
+
+  [key: string]: any;
+}
+
+/**
+ * Converts an object of type 'CasingPreserved' to JSON representation.
+ */
+/* eslint-disable max-len, quote-props */
+export function toJson_CasingPreserved(obj: CasingPreserved | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result: Record<string, any> = {
+    'foo': obj.foo,
+  };
+  for (const [k, v] of Object.entries(obj)) {
+    const key = k;
+    if (!result[key]) {
+      result[key] = v;
+    };
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -371,12 +409,12 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
-    'StringMap': ((obj.stringMap) === undefined) ? undefined : (Object.entries(obj.stringMap).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
-    'NumberMap': ((obj.numberMap) === undefined) ? undefined : (Object.entries(obj.numberMap).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
+  const result: Record<string, any> = {
+    'StringMap': ((obj.stringMap) === undefined) ? undefined : (Object.entries(obj.stringMap).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {})),
+    'NumberMap': ((obj.numberMap) === undefined) ? undefined : (Object.entries(obj.numberMap).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {})),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -415,14 +453,14 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'hyphen-name': obj.hyphenName,
     '$nameWithDolar': obj.nameWithDolar,
     'name with spaces': obj.nameWithSpaces,
     'x-extension': obj.xExtension,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -461,14 +499,14 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'StringProperty': obj.stringProperty,
     'BooleanProperty': obj.booleanProperty,
     'NumberProperty': obj.numberProperty,
     'With_UnderScore': obj.withUnderScore,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -502,13 +540,13 @@ export interface MyStruct {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'ref_to_complex': toJson_ComplexType(obj.refToComplex),
     'ReusedType': obj.reusedType?.value,
     'Haver': obj.haver?.value,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -529,11 +567,11 @@ export interface ComplexType {
 /* eslint-disable max-len, quote-props */
 export function toJson_ComplexType(obj: ComplexType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Ref_to_union': obj.refToUnion?.value,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 

@@ -38,7 +38,7 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'CamelCase1': obj.camelCase1,
     'Camel_Case2': obj.camelCase2,
     'camel_case_3': obj.camelCase3,
@@ -46,7 +46,7 @@ export function toJson_TestType(obj: TestType | undefined): Record<string, any> 
     'camel-case-5': obj.camelCase5,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -72,11 +72,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'field': obj.field,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -100,11 +100,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'field': obj.field,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -130,11 +130,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'field': obj.field,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -165,12 +165,12 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'firstEnum': obj.firstEnum,
     'child': toJson_FqnOfTestTypeChild(obj.child),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -209,11 +209,11 @@ export interface FqnOfTestTypeChild {
 /* eslint-disable max-len, quote-props */
 export function toJson_FqnOfTestTypeChild(obj: FqnOfTestTypeChild | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'secondEnum': obj.secondEnum,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -251,11 +251,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Color': obj.color,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -398,7 +398,7 @@ export interface EksProps {
 /* eslint-disable max-len, quote-props */
 export function toJson_EksProps(obj: EksProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Name': obj.name,
     'RoleArn': obj.roleArn,
     'LambdaRoleName': obj.lambdaRoleName,
@@ -417,7 +417,7 @@ export function toJson_EksProps(obj: EksProps | undefined): Record<string, any> 
     'Tags': obj.tags?.map(y => toJson_EksPropsTags(y)),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -444,11 +444,11 @@ export interface EksPropsKubernetesNetworkConfig {
 /* eslint-disable max-len, quote-props */
 export function toJson_EksPropsKubernetesNetworkConfig(obj: EksPropsKubernetesNetworkConfig | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'ServiceIpv4Cidr': obj.serviceIpv4Cidr,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -501,7 +501,7 @@ export interface EksPropsResourcesVpcConfig {
 /* eslint-disable max-len, quote-props */
 export function toJson_EksPropsResourcesVpcConfig(obj: EksPropsResourcesVpcConfig | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'SecurityGroupIds': obj.securityGroupIds?.map(y => y),
     'SubnetIds': obj.subnetIds?.map(y => y),
     'EndpointPublicAccess': obj.endpointPublicAccess,
@@ -509,7 +509,7 @@ export function toJson_EksPropsResourcesVpcConfig(obj: EksPropsResourcesVpcConfi
     'PublicAccessCidrs': obj.publicAccessCidrs?.map(y => y),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -539,12 +539,12 @@ export interface EncryptionConfigEntry {
 /* eslint-disable max-len, quote-props */
 export function toJson_EncryptionConfigEntry(obj: EncryptionConfigEntry | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Resources': obj.resources?.map(y => y),
     'Provider': toJson_Provider(obj.provider),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -570,12 +570,12 @@ export interface EksPropsKubernetesApiAccess {
 /* eslint-disable max-len, quote-props */
 export function toJson_EksPropsKubernetesApiAccess(obj: EksPropsKubernetesApiAccess | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Roles': obj.roles?.map(y => toJson_KubernetesApiAccessEntry(y)),
     'Users': obj.users?.map(y => toJson_KubernetesApiAccessEntry(y)),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -601,12 +601,12 @@ export interface EksPropsTags {
 /* eslint-disable max-len, quote-props */
 export function toJson_EksPropsTags(obj: EksPropsTags | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Value': obj.value,
     'Key': obj.key,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -631,11 +631,11 @@ export interface Provider {
 /* eslint-disable max-len, quote-props */
 export function toJson_Provider(obj: Provider | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'KeyArn': obj.keyArn,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -666,13 +666,13 @@ export interface KubernetesApiAccessEntry {
 /* eslint-disable max-len, quote-props */
 export function toJson_KubernetesApiAccessEntry(obj: KubernetesApiAccessEntry | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'Arn': obj.arn,
     'Username': obj.username,
     'Groups': obj.groups?.map(y => y),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -745,7 +745,7 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'stringValue': obj.stringValue,
     'booleanValue': obj.booleanValue,
     'dateValue': obj.dateValue?.toISOString(),
@@ -756,7 +756,7 @@ export function toJson_TestType(obj: TestType | undefined): Record<string, any> 
     'integerValue': obj.integerValue,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -795,14 +795,14 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'shouldBeRequired': toJson_ItemType(obj.shouldBeRequired),
-    'mapShouldBeOptional': ((obj.mapShouldBeOptional) === undefined) ? undefined : (Object.entries(obj.mapShouldBeOptional).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: toJson_ItemType(i[1]) }), {})),
+    'mapShouldBeOptional': ((obj.mapShouldBeOptional) === undefined) ? undefined : (Object.entries(obj.mapShouldBeOptional).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: toJson_ItemType(v) }), {})),
     'shouldAllowAdditionalProperties': toJson_FqnOfTestTypeShouldAllowAdditionalProperties(obj.shouldAllowAdditionalProperties),
     'arrayShouldBeOptional': obj.arrayShouldBeOptional?.map(y => toJson_ItemType(y)),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -823,11 +823,11 @@ export interface ItemType {
 /* eslint-disable max-len, quote-props */
 export function toJson_ItemType(obj: ItemType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'requiredField': obj.requiredField,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -849,11 +849,17 @@ export interface FqnOfTestTypeShouldAllowAdditionalProperties {
 /* eslint-disable max-len, quote-props */
 export function toJson_FqnOfTestTypeShouldAllowAdditionalProperties(obj: FqnOfTestTypeShouldAllowAdditionalProperties | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'someProperty': obj.someProperty,
   };
+  for (const [k, v] of Object.entries(obj)) {
+    const key = k.replace(/^./, k[0].toUpperCase());
+    if (!result[key]) {
+      result[key] = v;
+    };
+  };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -877,11 +883,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'other': toJson_Other(obj.other),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -902,11 +908,11 @@ export interface Other {
 /* eslint-disable max-len, quote-props */
 export function toJson_Other(obj: Other | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'StringValue': obj.stringValue,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -950,7 +956,7 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'stringValue': obj.stringValue,
     'boolValue': obj.boolValue,
     'numberValue': obj.numberValue,
@@ -958,7 +964,7 @@ export function toJson_TestType(obj: TestType | undefined): Record<string, any> 
     'arrayOfString': obj.arrayOfString?.map(y => y),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -982,11 +988,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'foo': obj.foo,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -1049,7 +1055,7 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'minReadySeconds': obj.minReadySeconds,
     'paused': obj.paused,
     'progressDeadlineSeconds': obj.progressDeadlineSeconds,
@@ -1058,7 +1064,7 @@ export function toJson_TestType(obj: TestType | undefined): Record<string, any> 
     'NonCamelCaseRequired': obj.nonCamelCaseRequired,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -1082,11 +1088,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'entrypoint': toJson_MyType(obj.entrypoint),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -1107,11 +1113,11 @@ export interface MyType {
 /* eslint-disable max-len, quote-props */
 export function toJson_MyType(obj: MyType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'self': toJson_MyType(obj.self),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -1137,11 +1143,11 @@ export interface TypeB {
 /* eslint-disable max-len, quote-props */
 export function toJson_TypeB(obj: TypeB | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'refToTypeA': obj.refToTypeA,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -1165,11 +1171,11 @@ export interface TypeA {
 /* eslint-disable max-len, quote-props */
 export function toJson_TypeA(obj: TypeA | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'ref': toJson_TypeC(obj.ref),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -1190,11 +1196,11 @@ export interface TypeC {
 /* eslint-disable max-len, quote-props */
 export function toJson_TypeC(obj: TypeC | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'field': obj.field,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
@@ -1221,11 +1227,11 @@ export interface TestType {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestType(obj: TestType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'fault': toJson_TestTypeFault(obj.fault),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -1249,11 +1255,11 @@ export interface TestTypeFault {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestTypeFault(obj: TestTypeFault | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'delay': toJson_TestTypeFaultDelay(obj.delay),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -1297,14 +1303,14 @@ export interface TestTypeFaultDelay {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestTypeFaultDelay(obj: TestTypeFaultDelay | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'exponentialDelay': obj.exponentialDelay,
     'fixedDelay': obj.fixedDelay,
     'percent': obj.percent,
     'percentage': toJson_TestTypeFaultDelayPercentage(obj.percentage),
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -1328,11 +1334,11 @@ export interface TestTypeFaultDelayPercentage {
 /* eslint-disable max-len, quote-props */
 export function toJson_TestTypeFaultDelayPercentage(obj: TestTypeFaultDelayPercentage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'value': obj.value,
   };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "

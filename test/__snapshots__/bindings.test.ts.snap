@@ -44,16 +44,22 @@ export interface Name {
 /* eslint-disable max-len, quote-props */
 export function toJson_Name(obj: Name | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'first': obj.first,
     'middle': obj.middle,
     'last': obj.last,
-    'objectWithTypedAdditionalPropertiesOnly': ((obj.objectWithTypedAdditionalPropertiesOnly) === undefined) ? undefined : (Object.entries(obj.objectWithTypedAdditionalPropertiesOnly).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
+    'objectWithTypedAdditionalPropertiesOnly': ((obj.objectWithTypedAdditionalPropertiesOnly) === undefined) ? undefined : (Object.entries(obj.objectWithTypedAdditionalPropertiesOnly).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {})),
     'objectWithPropertiesAndBooleanAdditionalProperties': toJson_NameObjectWithPropertiesAndBooleanAdditionalProperties(obj.objectWithPropertiesAndBooleanAdditionalProperties),
     'objectWithPropertiesAndTypedAdditionalProperties': toJson_NameObjectWithPropertiesAndTypedAdditionalProperties(obj.objectWithPropertiesAndTypedAdditionalProperties),
   };
+  for (const [k, v] of Object.entries(obj)) {
+    const key = k.replace(/^./, k[0].toUpperCase());
+    if (!result[key]) {
+      result[key] = v;
+    };
+  };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -75,11 +81,17 @@ export interface NameObjectWithPropertiesAndBooleanAdditionalProperties {
 /* eslint-disable max-len, quote-props */
 export function toJson_NameObjectWithPropertiesAndBooleanAdditionalProperties(obj: NameObjectWithPropertiesAndBooleanAdditionalProperties | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'name': obj.name,
   };
+  for (const [k, v] of Object.entries(obj)) {
+    const key = k.replace(/^./, k[0].toUpperCase());
+    if (!result[key]) {
+      result[key] = v;
+    };
+  };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 
@@ -101,11 +113,17 @@ export interface NameObjectWithPropertiesAndTypedAdditionalProperties {
 /* eslint-disable max-len, quote-props */
 export function toJson_NameObjectWithPropertiesAndTypedAdditionalProperties(obj: NameObjectWithPropertiesAndTypedAdditionalProperties | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
-  const result = {
+  const result: Record<string, any> = {
     'name': obj.name,
   };
+  for (const [k, v] of Object.entries(obj)) {
+    const key = k.replace(/^./, k[0].toUpperCase());
+    if (!result[key]) {
+      result[key] = v;
+    };
+  };
   // filter undefined values
-  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+  return Object.entries(result).reduce((r, [k, v]) => (v === undefined) ? r : ({ ...r, [k]: v }), {});
 }
 /* eslint-enable max-len, quote-props */
 "
