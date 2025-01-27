@@ -300,6 +300,60 @@ describe('enums', () => {
       },
     },
   });
+
+  which('has allowlisted characters', {
+    properties: {
+      Chars: {
+        type: 'string',
+        enum: [
+          '!=',
+          '!',
+          '<=',
+          '!~',
+          '\'',
+          '\\',
+          'Foo.Bar!=',
+          'Foo.!=Bar',
+          'bool:true',
+          'Foo-Bar',
+          'Foo_Bar',
+          'Foo.Bar',
+          '0.Foo',
+          'Foo.0',
+          '.Foo',
+          'Foo.',
+          '0.9',
+          '.9',
+          '9',
+          '9.',
+          '9.9',
+          '99',
+          '9.90.0.9',
+          'Foo<>>=9.0.9{}-Bar',
+        ],
+      },
+    },
+  });
+
+  which('has repeated values', {
+    properties: {
+      Same: {
+        type: 'string',
+        enum: [
+          'replace',
+          'Replace',
+          'keep',
+          'Keep',
+          'hashmod',
+          'HashMod',
+          'labelmap',
+          'LabelMap',
+          '24',
+          '0.99',
+        ],
+      },
+    },
+  });
 });
 
 which('primitives', {
@@ -378,6 +432,119 @@ test('if "toJson" is disabled, toJson functions are not generated', async () => 
   expect(await generate(gen)).toMatchSnapshot();
 });
 
+test('type can be an array with null and a single non null type', async () => {
+
+  const schema: JSONSchema4 = {
+    properties: {
+      bar: { type: ['null', 'boolean'] },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: false,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});
+
+test('additionalProperties when type is defined as array', async () => {
+
+  const schema: JSONSchema4 = {
+    properties: {
+      foo: {
+        type: ['null', 'object'],
+        additionalProperties: {
+          type: 'string',
+        },
+      },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: false,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});
+
+test('properties when type is defined as array', async () => {
+
+  const schema: JSONSchema4 = {
+    type: ['null', 'object'],
+    properties: {
+      bar: { type: 'string' },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: false,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});
+
+test('enum when type is defined as array', async () => {
+
+  const schema: JSONSchema4 = {
+    properties: {
+      foo: {
+        type: ['null', 'string'],
+        enum: ['val1', 'val2'],
+      },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: false,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});
+
+test('sanitize string enum when one of the values is null', async () => {
+
+  const schema: JSONSchema4 = {
+    properties: {
+      foo: {
+        type: ['null', 'string'],
+        enum: ['val1', null],
+      },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: false,
+    sanitizeEnums: true,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});
+
+test('sanitize number enum when one of the values is null', async () => {
+
+  const schema: JSONSchema4 = {
+    properties: {
+      foo: {
+        type: ['null', 'number'],
+        enum: [3, null],
+      },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: false,
+    sanitizeEnums: true,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});
+
 test('custom ref normalization', async () => {
 
   const foo = 'io.k8s.v1beta1.Foo';
@@ -434,3 +601,25 @@ function which(name: string, schema: JSONSchema4, definitions?: JSONSchema4) {
     expect(await generate(gen)).toMatchSnapshot();
   });
 }
+
+test('dedup properties with different casing', async () => {
+
+  // based on https://github.com/zalando/postgres-operator/blob/7d4da928726b5029f72e9ab83ee9b6ff481e70c7/manifests/postgresql.crd.yaml#L353-L357
+  const schema: JSONSchema4 = {
+    properties: {
+      pod_priority_class_name: {
+        type: 'string',
+      },
+      podPriorityClassName: {
+        type: 'string',
+      },
+    },
+  };
+
+  const gen = TypeGenerator.forStruct('Foo', schema, {
+    toJson: true,
+  });
+
+  expect(await generate(gen)).toMatchSnapshot();
+
+});

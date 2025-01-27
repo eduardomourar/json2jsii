@@ -115,6 +115,62 @@ export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> 
 "
 `;
 
+exports[`arrays with items 1`] = `
+"/**
+ * @schema MyStruct
+ */
+export interface MyStruct {
+  /**
+   * @schema MyStruct#ArrayProp
+   */
+  readonly arrayProp?: string[];
+
+}
+
+/**
+ * Converts an object of type 'MyStruct' to JSON representation.
+ */
+/* eslint-disable max-len, quote-props */
+export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'ArrayProp': obj.arrayProp?.map(y => y),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, quote-props */
+"
+`;
+
+exports[`arrays without items 1`] = `
+"/**
+ * @schema MyStruct
+ */
+export interface MyStruct {
+  /**
+   * @schema MyStruct#ArrayProp
+   */
+  readonly arrayProp?: any[];
+
+}
+
+/**
+ * Converts an object of type 'MyStruct' to JSON representation.
+ */
+/* eslint-disable max-len, quote-props */
+export function toJson_MyStruct(obj: MyStruct | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'ArrayProp': obj.arrayProp?.map(y => y),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, quote-props */
+"
+`;
+
 exports[`complex types 1`] = `
 "/**
  * @schema MyStruct
@@ -547,7 +603,7 @@ export class IntOrString {
   public static fromString(value: string): IntOrString {
     return new IntOrString(value);
   }
-  private constructor(public readonly value: any) {
+  private constructor(public readonly value: number | string) {
   }
 }
 
@@ -561,7 +617,7 @@ export class MyStructHaver {
   public static fromString(value: string): MyStructHaver {
     return new MyStructHaver(value);
   }
-  private constructor(public readonly value: any) {
+  private constructor(public readonly value: number | string) {
   }
 }
 "
