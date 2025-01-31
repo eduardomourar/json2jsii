@@ -1,6 +1,7 @@
 import camelCase from 'camelcase';
 import { JSONSchema4 } from 'json-schema';
 import { snakeCase } from 'snake-case';
+import { NAMED_SYMBOLS } from './allowlist';
 import { Code } from './code';
 import { ToJsonFunction } from './tojson';
 
@@ -36,6 +37,17 @@ export interface TypeGeneratorOptions {
   readonly toJson?: boolean;
 
   /**
+   * When set to true, enums are sanitized from the 'null' literal value,
+   * allowing typing the property as an enum, instead of the underlying type.
+   *
+   * Note that switching this from 'false' to 'true' is a breaking change in
+   * the generated code as it might change a property type.
+   *
+   * @default false
+   */
+  readonly sanitizeEnums?: boolean;
+
+  /**
    * Given a definition name, render the type name to be emitted by that definition.
    *
    * When `emitType` is invoked, the type name to be emitted is provided by the caller.
@@ -61,12 +73,16 @@ export class TypeGenerator {
    * (e.g. "Vpc", "FooBarZooFiGoo").
    */
   public static normalizeTypeName(typeName: string) {
+
+    // Handle kebab-case first
+    const stage1 = typeName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+
     // start with the full string and then use the regex to match all-caps sequences.
     const re = /([A-Z]+)(?:[^a-z]|$)/g;
-    let result = typeName;
+    let result = stage1;
     let m;
     do {
-      m = re.exec(typeName);
+      m = re.exec(stage1);
       if (m) {
         const before = result.slice(0, m.index); // all the text before the sequence
         const cap = m[1]; // group #1 matches the all-caps sequence we are after
@@ -99,9 +115,11 @@ export class TypeGenerator {
 
   private readonly typesToEmit: { [name: string]: TypeEmitter } = { };
   private readonly emittedTypes: Record<string, EmittedType> = {};
+  private readonly emittedProperties: Set<string> = new Set();
   private readonly exclude: string[];
   private readonly definitions: { [def: string]: JSONSchema4 };
   private readonly toJson: boolean;
+  private readonly sanitizeEnums: boolean;
   private readonly renderTypeName: (def: string) => string;
 
   /**
@@ -113,6 +131,7 @@ export class TypeGenerator {
     this.exclude = options.exclude ?? [];
     this.definitions = {};
     this.toJson = options.toJson ?? true;
+    this.sanitizeEnums = options.sanitizeEnums ?? false;
     this.renderTypeName = options.renderTypeName ?? DEFAULT_RENDER_TYPE_NAME;
 
     for (const [typeName, def] of Object.entries(options.definitions ?? {})) {
@@ -157,6 +176,48 @@ export class TypeGenerator {
   }
 
   /**
+   * Many schemas define a type as an array of types to indicate union types.
+   * To avoid having the type generator be aware of that, we transform those types
+   * into their corresponding typescript definitions.
+   * --------------------------------------------------
+   *
+   * Strictly speaking, these definitions are meant to allow the liternal 'null' value
+   * to be used in addition to the actual types. However, since union types are not supported
+   * in jsii, allowing this would mean falling back to 'any' and loosing all type safety for such
+   * properties. Transforming it into a single concrete optional type provides both type safety and
+   * the option to omit the property. What it doesn't allow is explicitly passing 'null', which might
+   * be desired in some cases. For now we prefer type safety over that.
+   *
+   * 1. ['null', '<type>'] -> optional '<type>'
+   * 2. ['null', '<type1>', '<type2>'] -> optional 'any'
+   *
+   * This is the normal jsii conversion, nothing much we can do here.
+   *
+   * 3. ['<type1>', '<type2>'] -> 'any'
+   */
+  private maybeTransformTypeArray(def: JSONSchema4) {
+
+    if (!Array.isArray(def.type)) {
+      return;
+    }
+
+    const nullType = def.type.some(t => t === 'null');
+    const nonNullTypes = new Set(def.type.filter(t => t !== 'null'));
+
+    if (nullType) {
+      def.required = false;
+    }
+
+    if (nonNullTypes.size === 0) {
+      def.type = 'null';
+    } else {
+      // if its a union of non null types we use 'any' to be jsii compliant
+      def.type = nonNullTypes.size > 1 ? 'any' : nonNullTypes.values().next().value;
+    }
+
+  }
+
+  /**
    * Emit a type based on a JSON schema. If `def` is not specified, the
    * definition of the type will be looked up in the `definitions` provided
    * during initialization or via `addDefinition()`.
@@ -173,6 +234,15 @@ export class TypeGenerator {
       if (!def) {
         throw new Error(`unable to find schema definition for ${typeName}`);
       }
+    }
+
+    this.maybeTransformTypeArray(def);
+
+    if (def.enum && this.sanitizeEnums) {
+      // santizie enums from liternal 'null' because they prevent emitting the enum
+      // and instead cause a fallback to 'string'. we assume the optionality of the enum
+      // covers the 'null' value.
+      def.enum = def.enum.filter(d => d !== null);
     }
 
     // callers expect that emit a type named `typeName` so we can't change it here
@@ -361,15 +431,17 @@ export class TypeGenerator {
       this.emitDescription(code, fqn, def.description);
 
       code.openBlock(`export class ${typeName}`);
+      const possibleTypes = [];
 
       for (const type of options) {
+        possibleTypes.push(type);
         const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
         code.openBlock(`public static ${methodName}(value: ${type}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
         code.closeBlock();
       }
 
-      code.openBlock('private constructor(public readonly value: any)');
+      code.openBlock(`private constructor(public readonly value: ${possibleTypes.join(' | ')})`);
       code.closeBlock();
 
       code.closeBlock();
@@ -408,6 +480,10 @@ export class TypeGenerator {
     return emitted;
   }
 
+  private propertyFqn(structFqn: string, propName: string) {
+    return `${structFqn}.${propName}`;
+  }
+
   private emitProperty(code: Code, name: string, propDef: JSONSchema4, structFqn: string, structDef: JSONSchema4, toJson: ToJsonFunction) {
     const originalName = name;
 
@@ -420,6 +496,14 @@ export class TypeGenerator {
     // convert the name to camel case so it's compatible with JSII
     name = camelCase(name);
 
+    const propertyFqn = this.propertyFqn(structFqn, name);
+
+    if (this.emittedProperties.has(propertyFqn)) {
+      // can happen if two properties have different casing that results
+      // in the same camelCase string.
+      return;
+    }
+
     this.emitDescription(code, `${structFqn}#${originalName}`, propDef.description);
     const propertyType = this.typeForProperty(`${structFqn}.${name}`, propDef);
     const required = this.isPropertyRequired(originalName, structDef);
@@ -429,6 +513,7 @@ export class TypeGenerator {
     code.line();
 
     toJson.addField(originalName, name, propertyType.toJson);
+    this.emittedProperties.add(propertyFqn);
   }
 
   private emitEnum(typeName: string, def: JSONSchema4, structFqn: string): EmittedType {
@@ -451,13 +536,23 @@ export class TypeGenerator {
 
       code.openBlock(`export enum ${typeName}`);
 
+      const processedValues = new Set<string>();
+
       for (const value of def.enum) {
         if (!['string', 'number'].includes(typeof(value))) {
           throw new Error('only enums with string or number values are supported');
         }
 
-        // sluggify and turn to UPPER_SNAKE_CASE
-        let memberName = snakeCase(`${value}`.replace(/[^a-z0-9]/gi, '_')).split('_').filter(x => x).join('_').toUpperCase();
+        let memberName = snakeCase(rewriteNamedSymbols(`${value}`).replace(/[^a-z0-9]/gi, '_')).split('_').filter(x => x).join('_').toUpperCase();
+
+        // If enums of same value exists, then we choose one of them and skip adding others
+        // since that would cause conflict
+        const lowerCaseValue = value?.toString().toLowerCase();
+        if (lowerCaseValue && !processedValues.has(lowerCaseValue)) {
+          processedValues.add(lowerCaseValue);
+        } else {
+          continue;
+        }
 
         // if member name starts with a non-alpha character, add a prefix so it becomes a symbol
         if (!/^[A-Z].*/i.test(memberName)) {
@@ -533,7 +628,8 @@ export class TypeGenerator {
 
   private typeForArray(propertyFqn: string, def: JSONSchema4): EmittedType {
     if (!def.items || typeof(def.items) !== 'object') {
-      throw new Error(`unsupported array type ${def.items}`);
+      // Falling back to an array of any type
+      def.items = {};
     }
 
     return this.typeForProperty(propertyFqn, def.items);
@@ -589,6 +685,66 @@ interface EmittedType {
    * Returns the code to convert a statement `s` back to JSON.
    */
   readonly toJson: (code: string) => string;
+}
+
+function rewriteNamedSymbols(input: string): string {
+  const ret = new Array<string>();
+
+  let cursor = 0;
+  while (cursor < input.length) {
+    const [prefixName, prefixLen] = longestPrefixMatch(input, cursor, NAMED_SYMBOLS);
+    if (prefixName) {
+      const prefix = `_${prefixName}_`.split('');
+      ret.push(...prefix);
+      cursor += prefixLen;
+    } else {
+      ret.push(input.charAt(cursor));
+      cursor += 1;
+    }
+  }
+
+  // Remove underscores if its only prefix to be returned
+  if (ret[0] === '_') { ret.unshift('VALUE'); }
+  if (ret[ret.length - 1] === '_') { ret.pop(); }
+
+  return ret.join('');
+}
+
+function longestPrefixMatch(input: string, index: number, lookupTable: Record<string, string>): [string | undefined, number] {
+  let ret: string | undefined;
+  let longest: number = 0;
+
+  for (const [name, value] of Object.entries(lookupTable)) {
+    if (hasSubStringAt(input, index, value) && value.length > longest && !isExemptPattern(input, index)) {
+      ret = name;
+      longest = value.length;
+    }
+  }
+  return [ret, longest];
+}
+
+function hasSubStringAt(input: string, index: number, substring: string): boolean {
+  if (index == input.indexOf(substring, index)) {
+    return true;
+  }
+
+  return false;
+}
+
+function isExemptPattern(input: string, index: number): boolean {
+  const exemptPatterns = [
+    // 9.9, 9.
+    /(?<=\d)\.\d/,
+  ];
+
+  return exemptPatterns.some((p) => testRegexAt(p, input, index));
+}
+
+function testRegexAt(regex: RegExp, input: string, index: number): boolean {
+  const re = new RegExp(regex, 'y');
+  re.lastIndex = index;
+
+  return re.test(input);
 }
 
 type TypeEmitter = (code: Code) => EmittedType;
